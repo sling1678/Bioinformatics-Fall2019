@@ -2,5 +2,5 @@ report/
 docs/
 bin/
 venv/
-.DSstore
+.DStore
 __pycache__
