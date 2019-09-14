@@ -1,0 +1,5 @@
+report/
+docs/
+bin/
+venv/
+.DSstore
