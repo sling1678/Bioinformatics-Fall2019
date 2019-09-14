@@ -14,8 +14,3 @@ for mRNA in mRNAs:
 with open('data/aa_sequences.dat', 'wb') as outfile:
     pickle.dump(aminoacid_sequences, outfile)
 
-# with open('data/aa_sequences.dat', 'rb') as f:
-#     aa_from_file = pickle.load(f)
-
-# print(aminoacid_sequences[1][2], aminoacid_sequences[1][3])
-# print(aa_from_file[1][2], aa_from_file[1][3])

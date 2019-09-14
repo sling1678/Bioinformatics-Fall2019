@@ -3,3 +3,4 @@ docs/
 bin/
 venv/
 .DSstore
+__pycache__
