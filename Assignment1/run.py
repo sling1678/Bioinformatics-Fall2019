@@ -19,7 +19,7 @@ for mRNA in mRNAs:
 for index, sample in enumerate(aminoacid_sequences):
   aa_sequence = sample[2]
   hb = compute_hydrophobicity_character(aa_sequence, aa_symbol_size=1, span_size=13)
-  aminoacid_sequences[index] = [sample[0], sample[1], sample[2], sample[3], hb]
+  aminoacid_sequences[index].append(hb)
 
 # TODO - generate plots and criteria for selecting transmembrane regions 
 # plt.plot(hb, "-o")
