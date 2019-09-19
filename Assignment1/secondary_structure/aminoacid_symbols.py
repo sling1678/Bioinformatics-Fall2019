@@ -27,7 +27,8 @@ def aminoacid_symbols():
     # Unique Amino Acids
     "Gly" : ("Glycine", "G", "molecular_structures/Gly.gif"),
     "Pro" : ("Proline", "P", "molecular_structures/Pro.gif"),
-
+    # Stop codon
+    "$$$" : ("Stop", "_", ""),
   }
   return aa
     

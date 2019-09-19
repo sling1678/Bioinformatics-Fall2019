@@ -31,4 +31,6 @@ if __name__ == "__main__":
   # print(x)
   # convert_to_three_letter_aa()
   x = compute_hydrophobicity_character(aa_sequence="MILYH",aa_symbol_size=1, span_size=5)
+  print(len(x))
+
   
