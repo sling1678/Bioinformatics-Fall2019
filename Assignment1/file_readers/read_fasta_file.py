@@ -53,9 +53,3 @@ if __name__ == "__main__":
   filename = "data/Assignment1Sequences.txt"
   results = read_file(filename)
   print(results)
-
-
-    
-    
-    
-
