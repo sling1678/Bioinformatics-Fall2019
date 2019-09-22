@@ -75,13 +75,12 @@ def simulate(initial_values, num_simulations=2):
   w2=initial_values["fitness2"]
   scriptdir = os.path.dirname(os.path.realpath(__file__))
 
-  output_file = scriptdir+"/"+output_file
-  
   result = []
   for sim in tqdm(range(num_simulations)):
     populations = select_haploid(N, f1, w1, w2, gens, None) # don't write yet
     result.append(populations)
   if output_file:
+    output_file = scriptdir+"/"+output_file
     with open(output_file, "w") as filehandle:
       for pops in result:
         filehandle.write('%s\n' % pops)  
@@ -94,13 +93,13 @@ if __name__ == "__main__":
   # Give parameters for simulation and saving data to file
   num_simulations = 5
 
-  output_file="data.txt"
+  output_file="data.txt" # if not saving, then make it None
   savefig_file="natural_selection_haploid.png"
   gens = 50
   N=1000
-  f1=0.5
-  w1=1.00
-  w2=0.01
+  f1=1.0
+  w1=0.0
+  w2=1.0
   initial_values = {
     "output_file" : output_file,
     "generations" : gens,
@@ -121,8 +120,6 @@ if __name__ == "__main__":
   fig1, ax1 = plt.subplots(figsize=[10,6])
   fig2, ax2 = plt.subplots(figsize=[10,6])
   #ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-  prop_cycle = plt.rcParams['axes.prop_cycle']
-  colors = prop_cycle.by_key()['color']
 
   def get_cmap(n, name='hsv'):#from https://stackoverflow.com/questions/14720331/how-to-generate-random-colors-in-matplotlib
       '''Returns a function that maps each index in 0, 1, ..., n-1 to a distinct 
@@ -133,7 +130,7 @@ if __name__ == "__main__":
     # gather data to plot
     generations = range( len(populations) )
     population1 = [pf[0] for pf in populations]
-    freq1 = [pf[0]/(pf[0]+pf[1]) for pf in populations]
+    freq1 = [pf[0]/(pf[0]+pf[1]) if (pf[0]+pf[1]) !=0 else 0 for pf in populations]
     population2 = [pf[1] for pf in populations]
     # Plot N1 and f1 - share x-axis, which is generations
     
@@ -149,15 +146,17 @@ if __name__ == "__main__":
     line3, = ax2.plot(generations, freq1, color=color, label="f1")
 
     #fig1.tight_layout()  # otherwise the right y-label is slightly clipped
-    fig2.tight_layout()  # otherwise the right y-label is slightly clipped
+    #fig2.tight_layout()  # otherwise the right y-label is slightly clipped
   
   ax1.set_title("Simple Model of Haploid Natural Selection")
   ax1.set_xlabel('Generations')
-  ax1.set_ylabel('Populations', color=color)
-  ax1.tick_params(axis='y', labelcolor=color) 
+  ax1.set_ylabel('Populations', color='k')
+  ax1.tick_params(axis='y', labelcolor='k') 
 
-  ax2.set_ylabel('Frequency of Allele 1', color=color)  
-  ax2.tick_params(axis='y', labelcolor=color)
+  ax2.set_title("Frequency of Allele 1 Versus Generations")
+  ax2.set_xlabel('Generations')
+  ax2.set_ylabel('Frequency of Allele 1', color='k')  
+  ax2.tick_params(axis='y', labelcolor='k')
 
   fig1.legend((line1, line2), ("N1", "N2"))
   fig1.savefig(scriptdir+"/"+savefig_file)
