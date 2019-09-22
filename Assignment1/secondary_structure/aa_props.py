@@ -1,5 +1,7 @@
 import pandas as pd 
 import numpy as np
+
+
 def aa_props(aa_prop_csv_data_file):
   """
   Reference:
@@ -17,6 +19,7 @@ def aa_props(aa_prop_csv_data_file):
   """
   aa_dataframe = pd.read_csv(aa_prop_csv_data_file)
   return aa_dataframe
+
 
 if __name__ == "__main__":
   df = aa_props(aa_prop_csv_data_file="./aa_props_table.csv")

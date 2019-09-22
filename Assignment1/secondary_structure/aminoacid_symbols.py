@@ -1,13 +1,16 @@
 def aminoacid_symbols():
+  """
+  Dictionary and visual representation of amino acids
+
+  """
   aa = {
     #Amino Acids with Hydrophobic Side Chain – Aliphatic
-   "Ala" : ("Alanine", "A", "molecular_structures/Ala.gif"),
+    "Ala" : ("Alanine", "A", "molecular_structures/Ala.gif"),
     "Ile" : ("Isoleucine", "I", "molecular_structures/Ile.gif"),
     "Leu" : ("Leucine",  "L", "molecular_structures/Leu.gif"),
     "Met" : ("Methionine", "M", "molecular_structures/Met.gif"),
     "Val" : ("Valine",  "V", "molecular_structures/Val.gif"),
-    #Amino Acids with Hydrophobic Side Chain – Aromatic
-         
+    #Amino Acids with Hydrophobic Side Chain – Aromatic  
     "Phe" : ("Phenylalanine", "F", "molecular_structures/Phe.gif"),
     "Trp" : ("Tryptophan", "W", "molecular_structures/Trp.gif"),
     "Tyr" : ("Tyrosine", "Y", "molecular_structures/Tyr.gif"),
@@ -36,5 +39,4 @@ def aminoacid_symbols():
 if __name__ == "__main__":
   aa  = aminoacid_symbols()
   print(aa["Lys"])
-
   

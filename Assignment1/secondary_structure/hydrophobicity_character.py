@@ -1,6 +1,8 @@
 import numpy as np 
 from secondary_structure import aa_hydrophobicity, aminoacid_symbols
-#import aa_hydrophobicity, aminoacid_symbols
+
+
+# import aa_hydrophobicity, aminoacid_symbols
 def convert_to_three_letter_aa(one_letter_aa):
   aa3  = aminoacid_symbols.aminoacid_symbols()
   result = "***"
@@ -9,7 +11,9 @@ def convert_to_three_letter_aa(one_letter_aa):
       result = key
       break
   return result
-    
+
+
+# compute hydrophobicity character
 def compute_hydrophobicity_character(aa_sequence, aa_symbol_size=3, span_size=23):
   aa_H = aa_hydrophobicity.aa_hydrophobicity() #get hydrophobicity of aminoacids
   protein_hydrophobicity = [] # the accumulator of result
@@ -32,5 +36,3 @@ if __name__ == "__main__":
   # convert_to_three_letter_aa()
   x = compute_hydrophobicity_character(aa_sequence="MILYH",aa_symbol_size=1, span_size=5)
   print(len(x))
-
-  
