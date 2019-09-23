@@ -78,17 +78,22 @@ def analyze_huydrophobicity_profile(hp, outer_size, upper_cutoff=1.0, lower_cuto
     7. return result
     8. Later print one line of prediction over one line of one-letter aa-sequence
     9. More advanced - process topology by positive-inside rule
+  Arguments:
+    hp : weighted hydrophobic values (size = protein_size minus widow_size )
+    outer_size : window size
+    upper_cutoff : (default=1.0) for definite inside membrane
+    lower_cutoff : (default=0.5) for putative inside membrane
+    critical_num_residues : (default=21) for processing topologies - not used so far
+  Returns:
+    result : list of 'x' meaning undecided, 'M' definitely inside membrane, 'P' putatively inside membrane
   """
   result = ['x' for i in range(len(hp)+2*outer_size)] 
-  # TODO
-  hp_with_index = [ [hp[i], i] for i in range(len(hp)) ]
 
-  print('hp_i', hp_with_index)
+  hp_with_index = [ [hp[i], i] for i in range(len(hp)) ] 
   hp_with_index_sorted = sorted(hp_with_index, reverse=True)  
-  print('hp_i_s', hp_with_index_sorted)
+  
   hp_with_index_relevant = [ x for x in hp_with_index_sorted if x[0] >= lower_cutoff  ]
-  print('hp_i_r', hp_with_index_relevant)
-
+  
   already_done_set = set()
   hp_with_index_relevant2=[]
   for item in hp_with_index_relevant:
@@ -98,22 +103,28 @@ def analyze_huydrophobicity_profile(hp, outer_size, upper_cutoff=1.0, lower_cuto
     else:
       already_done_set = already_done_set|temp_set
       hp_with_index_relevant2.append(item)
-  print('hp_r_2 = ', hp_with_index_relevant2)
-
+  
   hp_with_true_indices = [ [x[0], x[1]+outer_size] for x in hp_with_index_relevant2 ]
-  print('hp_i_t', hp_with_true_indices)
-  print('result=', result)
-  for idx, item in enumerate(hp_with_true_indices):
+
+  for item in hp_with_true_indices:
     if item[0] >= upper_cutoff:
-      for i in range(idx-outer_size,idx+outer_size+1,1):
-        print("i:", i)
+      for i in range(item[1]-outer_size,item[1]+outer_size+1,1):
         result[i] = "M"
     elif item[0] >= lower_cutoff:
-      for i in range(idx-outer_size,idx+outer_size+1,1):
+      for i in range(item[1]-outer_size,item[1]+outer_size+1,1):
         result[i] = "P"
-  print('result=', result)
-
   
+
+
+  # print('hp_i', hp_with_index)
+  # print('hp_i_s', hp_with_index_sorted)
+  # print('hp_i_r', hp_with_index_relevant)
+  # print('hp_r_2 = ', hp_with_index_relevant2)
+  # print('hp_i_t', hp_with_true_indices)
+  # print('result=', result)
+
+
+  return result
 
 
 
@@ -128,7 +139,7 @@ if __name__ == "__main__":
   aa_sequence="I"*7+"R"*1+"C"*5 # test sequence
   hydrophobicities = von_heijne_scale()
   hp, outer_size = build_hydrophobicity_profile(aa_sequence, hydrophobicities, outer_size=3, inner_size=1)
-  print(hp)
+  #print(hp)
   analyze_huydrophobicity_profile(hp, outer_size, \
     upper_cutoff=1.0, lower_cutoff=0.5, critical_num_residues=21)
 
