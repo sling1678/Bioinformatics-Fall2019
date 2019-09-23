@@ -1,6 +1,4 @@
 import numpy as np 
-import pandas as pd 
-import os
 
 def compute_location_weights(outer_size=10, inner_size=5):
   """
@@ -27,10 +25,6 @@ def compute_location_weights(outer_size=10, inner_size=5):
     weights.append( (2*n+2-i)/norm )
   return weights
 
-def get_aa_props(path_to_aa_props_table):
-  aa_dataframe = pd.read_csv(path_to_aa_props_table)
-  aa_dataframe = aa_dataframe.set_index("Symbol_3", drop = False)
-  return aa_dataframe
 
 def von_heijne_scale():
   "Ref: Von Heijne, J. Mol. Biol, 1992"
@@ -64,10 +58,7 @@ def build_hydrophobicity_profile(aa_sequence_1_let, hydrophobicities, outer_size
     hp = [ np.sum((hp_vals[i:i+2*outer_size+1]).flatten()*weights) for i in range(0, len(hp_vals)-2*outer_size,1) ]
   return hp, outer_size
 
-
-
-
-def analyze_huydrophobicity_profile(hp, outer_size, lowest_cutoff=0.5, mid_cutoff=1.0, critical_num_residues=21):
+def analyze_huydrophobicity_profile(hp, outer_size, upper_cutoff=1.0, lower_cutoff=0.5, critical_num_residues=21):
   """
   Classify the membrane segments as : types 'certain' and 'piutative'.
   Procedure: Find highest hp value, then classify the 21 residues around it as certain or putative depending on the value at the peak, then look for next pean and repeat till less than 20 residues left or highest peak is less than lower_cutoff.
@@ -88,8 +79,43 @@ def analyze_huydrophobicity_profile(hp, outer_size, lowest_cutoff=0.5, mid_cutof
     8. Later print one line of prediction over one line of one-letter aa-sequence
     9. More advanced - process topology by positive-inside rule
   """
-  result = [] 
+  result = ['x' for i in range(len(hp)+2*outer_size)] 
   # TODO
+  hp_with_index = [ [hp[i], i] for i in range(len(hp)) ]
+
+  print('hp_i', hp_with_index)
+  hp_with_index_sorted = sorted(hp_with_index, reverse=True)  
+  print('hp_i_s', hp_with_index_sorted)
+  hp_with_index_relevant = [ x for x in hp_with_index_sorted if x[0] >= lower_cutoff  ]
+  print('hp_i_r', hp_with_index_relevant)
+
+  already_done_set = set()
+  hp_with_index_relevant2=[]
+  for item in hp_with_index_relevant:
+    temp_set = set(range(item[1]-outer_size, item[1]+outer_size+1,1))
+    if already_done_set.intersection(temp_set):
+      pass
+    else:
+      already_done_set = already_done_set|temp_set
+      hp_with_index_relevant2.append(item)
+  print('hp_r_2 = ', hp_with_index_relevant2)
+
+  hp_with_true_indices = [ [x[0], x[1]+outer_size] for x in hp_with_index_relevant2 ]
+  print('hp_i_t', hp_with_true_indices)
+  print('result=', result)
+  for idx, item in enumerate(hp_with_true_indices):
+    if item[0] >= upper_cutoff:
+      for i in range(idx-outer_size,idx+outer_size+1,1):
+        print("i:", i)
+        result[i] = "M"
+    elif item[0] >= lower_cutoff:
+      for i in range(idx-outer_size,idx+outer_size+1,1):
+        result[i] = "P"
+  print('result=', result)
+
+  
+
+
 
   
 
@@ -97,13 +123,12 @@ def analyze_huydrophobicity_profile(hp, outer_size, lowest_cutoff=0.5, mid_cutof
 
 
 if __name__ == "__main__":
-  dir_path = os.path.dirname(os.path.realpath(__file__))
-  path_to_aa_props_table = dir_path+"/"+"aa_props_table.csv"
-  aa_dataframe = get_aa_props(path_to_aa_props_table)
 
-  aa_sequence="F"*7+"I"*7+"C"*7+"A"*7
+  #aa_sequence="F"*7+"I"*7+"C"*7+"A"*7 # test sequence
+  aa_sequence="I"*7+"R"*1+"C"*5 # test sequence
   hydrophobicities = von_heijne_scale()
   hp, outer_size = build_hydrophobicity_profile(aa_sequence, hydrophobicities, outer_size=3, inner_size=1)
   print(hp)
-  
-  # analyze_huydrophobicity_profile(hp, outer_size, lowest_cutoff=-2.5, mid_cutoff=-1.7, critical_num_residues=21)
+  analyze_huydrophobicity_profile(hp, outer_size, \
+    upper_cutoff=1.0, lower_cutoff=0.5, critical_num_residues=21)
+
