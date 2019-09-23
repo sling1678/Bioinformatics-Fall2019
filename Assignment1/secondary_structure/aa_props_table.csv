@@ -1,4 +1,4 @@
-Symbol_3,Name,Symbol_1,Molcular_Weight,Molecular_Formula,Residue_Formula,Residue_Weight_with_H2O,pKa,pKb,pKx,pI,Charge,Hydrophobicity,GES
+Symbol_3,Name,Symbol_1,Molcular_Weight,Molecular_Formula,Residue_Formula,Residue_Weight_with_H2O,pKa,pKb,pKx,pI,Charge,Hydrophobicity,GES,VH
 Ala,Alanine,A,89.1,C3H7NO2,C3H5NO,71.08,2.34,9.69,�,6,0,41,-1.6
 Arg,Arginine,R,174.2,C6H14N4O2,C6H12N4O,156.19,2.17,9.04,12.48,10.76,1,-14,12.3
 Asn,Asparagine,N,132.12,C4H8N2O3,C4H6N2O2,114.11,2.02,8.8,�,5.41,0,-28,4.8
