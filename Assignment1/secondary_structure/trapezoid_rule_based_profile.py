@@ -123,10 +123,22 @@ def analyze_huydrophobicity_profile(hp, outer_size, upper_cutoff=1.0, lower_cuto
   # print('hp_i_t', hp_with_true_indices)
   # print('result=', result)
 
+  result = ''.join(result)
 
   return result
 
 
+def print_predictions(aa_sequence, result, line_len=50):
+  cur_idx=0  
+  while True:
+    if cur_idx+line_len < len(aa_sequence):
+      print(result[cur_idx:cur_idx+line_len])
+      print(aa_sequence[cur_idx:cur_idx+line_len])
+      cur_idx += line_len
+    else:
+      print(result[cur_idx:])
+      print(aa_sequence[cur_idx:])
+      break
 
   
 
@@ -136,10 +148,17 @@ def analyze_huydrophobicity_profile(hp, outer_size, upper_cutoff=1.0, lower_cuto
 if __name__ == "__main__":
 
   #aa_sequence="F"*7+"I"*7+"C"*7+"A"*7 # test sequence
-  aa_sequence="I"*7+"R"*1+"C"*5 # test sequence
+  aa_sequence="I"*7+"R"*1+"C"*5+"G"*10+"F"*20+"I"*25 # test sequence
   hydrophobicities = von_heijne_scale()
   hp, outer_size = build_hydrophobicity_profile(aa_sequence, hydrophobicities, outer_size=3, inner_size=1)
-  #print(hp)
-  analyze_huydrophobicity_profile(hp, outer_size, \
+  
+  result = analyze_huydrophobicity_profile(hp, outer_size, \
     upper_cutoff=1.0, lower_cutoff=0.5, critical_num_residues=21)
+  # print the output
+  #print(len(result) == len(aa_sequence))
+  print_predictions(aa_sequence, result, line_len=20)
+
+
+
+
 
