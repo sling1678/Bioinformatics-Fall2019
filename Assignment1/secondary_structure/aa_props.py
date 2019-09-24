@@ -18,6 +18,7 @@ def aa_props(aa_prop_csv_data_file):
 
   """
   aa_dataframe = pd.read_csv(aa_prop_csv_data_file)
+  aa_dataframe = aa_dataframe.set_index("Symbol_3", drop = False)
   return aa_dataframe
 
 
