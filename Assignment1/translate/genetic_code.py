@@ -1,6 +1,6 @@
 def genetic_code():
   """
-  One and three-letter codes for aminoacids
+  One-letter codes for aminoacids
   """
   one_letter_code = \
          {'UCA' : 'S',    # Serine
@@ -68,71 +68,5 @@ def genetic_code():
           'GGG' : 'G',    # Glycine
           'GGU' : 'G'}    # Glycine
 
-  three_letter_code = \
-        { 'UCA' : 'Ser',    # Serine
-          'UCC' : 'Ser',    # Serine
-          'UCG' : 'Ser',    # Serine
-          'UCU' : 'Ser',    # Serine
-          'UUC' : 'Phe',    # Phenylalanine
-          'UUU' : 'Phe',    # Phenylalanine
-          'UUA' : 'Leu',    # Leucine
-          'UUG' : 'Leu',    # Leucine
-          'UAC' : 'Tyr',    # Tyrosine
-          'UAU' : 'Tyr',    # Tyrosine
-          'UAA' : '___',    # Stop
-          'UAG' : '___',    # Stop
-          'UGC' : 'Cys',    # Cysteine
-          'UGU' : 'Cys',    # Cysteine
-          'UGA' : '___',    # Stop
-          'UGG' : 'Trp',    # Tryptophan
-          'CUA' : 'Leu',    # Leucine
-          'CUC' : 'Leu',    # Leucine
-          'CUG' : 'Leu',    # Leucine
-          'CUU' : 'Leu',    # Leucine
-          'CCA' : 'Pro',    # Proline
-          'CCC' : 'Pro',    # Proline
-          'CCG' : 'Pro',    # Proline
-          'CCU' : 'Pro',    # Proline
-          'CAC' : 'His',    # Histidine
-          'CAU' : 'His',    # Histidine
-          'CAA' : 'Gln',    # Glutamine
-          'CAG' : 'Gln',    # Glutamine
-          'CGA' : 'Arg',    # Arginine
-          'CGC' : 'Arg',    # Arginine
-          'CGG' : 'Arg',    # Arginine
-          'CGU' : 'Arg',    # Arginine
-          'AUA' : 'Ile',    # Isoleucine
-          'AUC' : 'Ile',    # Isoleucine
-          'AUU' : 'Ile',    # Isoleucine
-          'AUG' : 'Met',    # Methionine
-          'ACA' : 'Thr',    # Threonine
-          'ACC' : 'Thr',    # Threonine
-          'ACG' : 'Thr',    # Threonine
-          'ACU' : 'Thr',    # Threonine
-          'AAC' : 'Asn',    # Asparagine
-          'AAU' : 'Asn',    # Asparagine
-          'AAA' : 'Lys',    # Lysine
-          'AAG' : 'Lys',    # Lysine
-          'AGC' : 'Ser',    # Serine
-          'AGU' : 'Ser',    # Serine
-          'AGA' : 'Arg',    # Arginine
-          'AGG' : 'Arg',    # Arginine          
-          'GUA' : 'Val',    # Valine
-          'GUC' : 'Val',    # Valine
-          'GUG' : 'Val',    # Valine
-          'GUU' : 'Val',    # Valine
-          'GCA' : 'Ala',    # Alanine
-          'GCC' : 'Ala',    # Alanine
-          'GCG' : 'Ala',    # Alanine
-          'GCU' : 'Ala',    # Alanine
-          'GAC' : 'Asp',    # Aspartic Acid
-          'GAU' : 'Asp',    # Aspartic Acid
-          'GAA' : 'Glu',    # Glutamic Acid
-          'GAG' : 'Glu',    # Glutamic Acid
-          'GGA' : 'Gly',    # Glycine
-          'GGC' : 'Gly',    # Glycine
-          'GGG' : 'Gly',    # Glycine
-          'GGU' : 'Gly'}    # Glycine
 
-
-  return one_letter_code, three_letter_code
+  return one_letter_code
