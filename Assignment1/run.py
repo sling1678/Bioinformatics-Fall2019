@@ -21,24 +21,18 @@ Description: Program for taking gene sequences from a FASTA file and translating
 data_file = "data/Assignment1Sequences.txt"    # sample gene sequence file
 mRNAs = read_fasta_file.read_file(data_file)    # read in file and store genes to be translated
 aminoacid_sequences = []    # translated into one letter amino acid sequences
-pretty_aminoacid_sequences = []    # translated in three letter amino acid sequences
 
 
-# translate each gene
+# Translate each gene sequence
 for mRNA in mRNAs:
   label, header = mRNA[0], mRNA[1]
   # Just to check length of genome
   aminoacid_sequence, nucleotide_errors = \
-    translate.translate_simple(mRNA[2], one_letter=True)
+    translate.translate_simple(mRNA[2])
   aminoacid_sequences.append([label, header, aminoacid_sequence, nucleotide_errors])
 
-  # generate three letter sequence for output
-  pretty_aminoacid_sequence, nucleotide_errors = \
-    translate.translate_simple(mRNA[2], one_letter=False)
-  pretty_aminoacid_sequences.append([label, header, pretty_aminoacid_sequence, nucleotide_errors])
 
-
-# create hydrophobicity graphs
+# Create hydrophobicity graphs
 span_size=13
 for idx, sample in enumerate(aminoacid_sequences):
   aa_sequence = sample[2]
@@ -46,7 +40,7 @@ for idx, sample in enumerate(aminoacid_sequences):
   hb = hydrophobicity_character.compute_hydrophobicity_character(aa_sequence, aa_symbol_size=1, span_size=span_size)
   aminoacid_sequences[idx].append(hb)
 
-  # plot the data
+  # Plot the data
   xdata = np.array(range(len(hb))) + span_size//2
   ydata = np.array(hb)
   fig = plt.figure(figsize=(10,6), num=idx)
@@ -58,15 +52,13 @@ for idx, sample in enumerate(aminoacid_sequences):
   plt.show()
 
 
-# Output gene sequence, gene length, aa lengthtranslated amino acid sequences (one & three letter), and nucleotide errors
-for (mRNA, aminoacid_sequence, pretty_aminoacid_sequence) in zip(mRNAs, aminoacid_sequences, pretty_aminoacid_sequences): 
+# Output gene sequence, gene length, aa length translated amino acid sequences (one letter), and nucleotide errors
+for (mRNA, aminoacid_sequence) in zip(mRNAs, aminoacid_sequences): 
   print(aminoacid_sequence[0])
   print("\nGene Sequence Length:")
   print(len(mRNA[2]))
   print("\nAmino acid Sequence Length:")
   print(len(aminoacid_sequence[2]))
-  print("\nAmino acid Sequence (three letter translation):")
-  print(pretty_aminoacid_sequence[2])
   print("\nAmino acid Sequence (one letter translation):")
   print(aminoacid_sequence[2])
   print("\nNucleotide Errors:")
