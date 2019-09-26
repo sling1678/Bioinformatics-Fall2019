@@ -84,7 +84,6 @@ Arguments:
 
 Returns:
   hp : hydrophobicity profile as numpy array
-
 """
 def build_hydrophobicity_profile(aa_sequence):
     #hydrophobicities = von_heijne_scale()
@@ -119,7 +118,7 @@ Returns:
 """
 def analyze_hydrophobicity_profile(hp, upper_cutoff=1, lower_cutoff=.5):
     # Resultant array
-    result = ['x' for i in range(len(hp) + 2 * OUTER_SIZE)]
+    result_string = ['x' for i in range(len(hp) + 2 * OUTER_SIZE)]
 
     # Give each hydrophobic value an index corresponding to their position in the amino acid chain
     hp_with_index = [[hp[i], i] for i in range(len(hp))]
@@ -149,22 +148,36 @@ def analyze_hydrophobicity_profile(hp, upper_cutoff=1, lower_cutoff=.5):
     # original amino acid sequence.
     hp_with_true_indices = [[x[0], x[1] + OUTER_SIZE] for x in hp_with_index_relevant2]
 
-    print(hp_with_true_indices)
+    # Sort the certain and potential hydrophobic regions by index positions (i.e. order in which they appear in the
+    # amino acid sequence
+    hp_with_true_indices = sorted(hp_with_true_indices, key = lambda x: x[1])
 
-    # Mark each amino acid in a region we are certain is a transmembrane region with 'M', and each amino acid in a
-    # region which is possibly a transmembrane region with 'P'
+    # Replace the hydrophobic value of the critical residue with a simple marker indicating certain (M) versus
+    # putative (P)
+    # Replace index of critical residue with index of first residue in window
+    # Add a second index indicating the last residue in the window.
     for item in hp_with_true_indices:
         if item[0] >= upper_cutoff:
-            for i in range(item[1] - OUTER_SIZE, item[1] + OUTER_SIZE + 1, 1):
-                result[i] = "M"
+            item[0] = 'M'
         elif item[0] >= lower_cutoff:
-            for i in range(item[1] - OUTER_SIZE, item[1] + OUTER_SIZE + 1, 1):
-                result[i] = "P"
+            item[0] = 'P'
+        item[1] -= OUTER_SIZE
+        item.append(item[1] + 2 * OUTER_SIZE)
 
-    # Convert result to string
-    result = ''.join(result)
 
-    return result
+    # Modify the resultant string array to show putative and certain transmembrane regions
+    for item in hp_with_true_indices:
+        if item[0] == 'M':
+            for i in range(item[1], item[2]):
+                result_string[i] = "M"
+        elif item[0] == 'P':
+            for i in range(item[1], item[2]):
+                result_string[i] = "P"
+
+    # Convert resultant string array to string
+    result_string = ''.join(result_string)
+
+    return result_string, hp_with_true_indices
 
 
 def print_predictions(aa_sequence, result, line_len=50):
