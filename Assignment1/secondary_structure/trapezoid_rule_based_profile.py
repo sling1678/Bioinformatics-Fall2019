@@ -20,8 +20,6 @@ Membrane Protein Structure Prediction
 Hydrophobicity Analysis and the Positive-inside Rule
 Gunnar von Heijne 
 """
-
-
 def compute_location_weights():
     # norm is a normalizing value used to compute outer window weights
     norm = (1 + OUTER_SIZE) ** 2 - INNER_SIZE ** 2
@@ -54,28 +52,29 @@ def von_heijne_scale():
 
 def aa_hydrophobicity():
     hydrophobicity = {
-        "I"	: (4.5,	0.31,	-0.60,	-1.56,	1.97),
+        "I"	: (4.5, 0.31,	-0.60,	-1.56,	1.97),
         "V"	: (4.2,	-0.07,	-0.31,	-0.78,	1.46),
         "L"	: (3.8,	0.56,	-0.55,	-1.81,	1.82),
-        "F"	: (	2.8,	1.13,	-0.32,	-2.20,	1.98),
-        "C"	: (	2.5,	0.24,	-0.13,	0.49,	-0.30),
-        "M"	: (	1.9,	0.23,	-0.10,	-0.76,	1.40),
-        "A"	: (	1.8,	-0.17,	0.11,	0.0,	0.38),
-        "G"	: (	-0.4,	-0.01,	0.74,	1.72,	-0.19),
-        "T"	: (	-0.7,	-0.14,	0.52,	1.78,	-0.32),
-        "S"	: (	-0.8,	-0.13,	0.84,	1.83,	-0.53),
-        "W"	: (	-0.9,	1.85,	0.30,	-0.38,	1.53),
-        "Y"	: (	-1.3,	0.94,	0.68,	-1.09,	0.49),
-        "P"	: (	-1.6,	-0.45,	2.23,	-1.52,	-1.44),
-        "H"	: (	-3.2,	-0.96,	2.06,	4.76,	-1.44),
-        "E"	: (	-3.5,	-2.02,	2.68,	1.64,	-2.90),
-        "Q"	: (	-3.5,	-0.58,	2.36,	3.01,	-1.84),
-        "D"	: (	-3.5,	-1.23,	3.49,	2.95,	-3.27),
-        "N"	: (	-3.5,	-0.42,	2.05,	3.47,	-1.62),
-        "K"	: (	-3.9,	-0.99,	2.71,	5.39,	-3.46),
-        "R"	: (	-4.5,	-0.81,	2.58,	3.71,	-2.57),
+        "F"	: (2.8,	1.13,	-0.32,	-2.20,	1.98),
+        "C"	: (2.5,	0.24,	-0.13,	0.49,	-0.30),
+        "M"	: (1.9,	0.23,	-0.10,	-0.76,	1.40),
+        "A"	: (1.8,	-0.17,	0.11,	0.0,	0.38),
+        "G"	: (-0.4,	-0.01,	0.74,	1.72,	-0.19),
+        "T"	: (-0.7,	-0.14,	0.52,	1.78,	-0.32),
+        "S"	: (-0.8,	-0.13,	0.84,	1.83,	-0.53),
+        "W"	: (-0.9,	1.85,	0.30,	-0.38,	1.53),
+        "Y"	: (-1.3,	0.94,	0.68,	-1.09,	0.49),
+        "P"	: (-1.6,	-0.45,	2.23,	-1.52,	-1.44),
+        "H"	: (-3.2,	-0.96,	2.06,	4.76,	-1.44),
+        "E"	: (-3.5,	-2.02,	2.68,	1.64,	-2.90),
+        "Q"	: (-3.5,	-0.58,	2.36,	3.01,	-1.84),
+        "D"	: (-3.5,	-1.23,	3.49,	2.95,	-3.27),
+        "N"	: (-3.5,	-0.42,	2.05,	3.47,	-1.62),
+        "K"	: (-3.9,	-0.99,	2.71,	5.39,	-3.46),
+        "R"	: (-4.5,	-0.81,	2.58,	3.71,	-2.57),
     }
     return hydrophobicity
+
 
 """
 Uses hydrophobicity scale to build hydrophobicity profile using weighted averages calculated by the trapezoid rule
@@ -88,8 +87,8 @@ Returns:
 
 """
 def build_hydrophobicity_profile(aa_sequence):
-    # hydrophobicities = von_heijne_scale()
-    # hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
+    #hydrophobicities = von_heijne_scale()
+    #hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
 
     hydrophobicities = aa_hydrophobicity()
     hp_vals = np.array([hydrophobicities[aa][0] for aa in aa_sequence])
@@ -118,8 +117,6 @@ Arguments:
 Returns:
     result : list of 'x' meaning undecided, 'M' definitely inside membrane, 'P' putatively inside membrane
 """
-
-
 def analyze_hydrophobicity_profile(hp, upper_cutoff=1, lower_cutoff=.5):
     # Resultant array
     result = ['x' for i in range(len(hp) + 2 * OUTER_SIZE)]
@@ -151,6 +148,8 @@ def analyze_hydrophobicity_profile(hp, upper_cutoff=1, lower_cutoff=.5):
     # Thus, we now increment each index with the value OUTER_SIZE, to get the index of each result as it relates to the
     # original amino acid sequence.
     hp_with_true_indices = [[x[0], x[1] + OUTER_SIZE] for x in hp_with_index_relevant2]
+
+    print(hp_with_true_indices)
 
     # Mark each amino acid in a region we are certain is a transmembrane region with 'M', and each amino acid in a
     # region which is possibly a transmembrane region with 'P'

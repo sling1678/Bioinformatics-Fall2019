@@ -22,11 +22,15 @@ for mRNA in mRNAs:
 hydrophobicity_profiles = []
 for aas in aminoacid_sequences:
   hydrophobicity_profiles.append(trapezoid_rule_based_profile.analyze_sequence(aas[0]))
-
+print(aminoacid_sequences[0][0])
 print(hydrophobicity_profiles[0])
+print(aminoacid_sequences[1][0])
 print(hydrophobicity_profiles[1])
+print(aminoacid_sequences[2][0])
 print(hydrophobicity_profiles[2])
 """
 print(len(hydrophobicity_profiles[0]))
 print(len(aas[0]))
 """
+
+
