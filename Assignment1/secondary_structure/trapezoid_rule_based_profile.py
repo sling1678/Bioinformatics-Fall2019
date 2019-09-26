@@ -66,16 +66,20 @@ Returns:
 
 
 def build_hydrophobicity_profile(aa_sequence):
+    print(f"length of aa_seq {len(aa_sequence)}")
     hydrophobicities = von_heijne_scale()
     hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
+    print(f"length of hydrophobicity mapping {len(hp_vals)}")
 
     hp = []
 
     weights = np.array(compute_location_weights())
 
     if len(aa_sequence) >= OUTER_SIZE:
-        for i in range(0, len(hp_vals) - weights.size - 1):
+        for i in range(0, len(hp_vals) - weights.size + 1):
             hp.append(np.sum(hp_vals[i:i + weights.size].flatten() * weights))
+
+    print(f"length of hp {len(hp)}")
     return hp
 
 
@@ -167,3 +171,16 @@ if __name__ == "__main__":
     # print the output
     # print(len(result) == len(aa_sequence))
     # print_predictions(aa_sequence, result)
+
+def analyze_sequence(aminoacid_seq):
+    hp = build_hydrophobicity_profile(aminoacid_seq)
+    result = analyze_hydrophobicity_profile(hp)
+    """
+    print(f"length of amino acid sequence {len(aminoacid_seq)}")
+    print(f"amino acid sequence{aminoacid_seq}")
+    print(f"length of hydrophobicity profile {len(hp)}")
+    print(f"hydrophobicity profile {hp}")
+    print(f"length of result {len(result)}")
+    print(f"result {result}")
+    """
+    return result
