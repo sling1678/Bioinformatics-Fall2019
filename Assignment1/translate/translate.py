@@ -25,5 +25,4 @@ def translate_simple(mRNA):
     if code[mRNA[i:i+3]] == '_':
       break
 
-
-  return aminoacid_sequence, nucleotide_errors
+  return aminoacid_sequence[:-1], nucleotide_errors
