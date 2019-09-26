@@ -26,5 +26,7 @@ for aas in aminoacid_sequences:
 print(hydrophobicity_profiles[0])
 print(hydrophobicity_profiles[1])
 print(hydrophobicity_profiles[2])
+"""
 print(len(hydrophobicity_profiles[0]))
 print(len(aas[0]))
+"""
