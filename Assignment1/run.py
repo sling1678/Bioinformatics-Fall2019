@@ -1,7 +1,6 @@
 from file_readers import read_fasta_file
 from translate import translate
-# from secondary_structure.hydrophobicity_character import compute_hydrophobicity_character
-from secondary_structure import hydrophobicity_character
+from secondary_structure import trapezoid_rule_based_profile
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
@@ -37,7 +36,7 @@ span_size=13
 for idx, sample in enumerate(aminoacid_sequences):
   aa_sequence = sample[2]
 
-  hb = hydrophobicity_character.compute_hydrophobicity_character(aa_sequence, aa_symbol_size=1, span_size=span_size)
+  hb = trapezoid_rule_based_profile.build_hydrophobicity_profile(aa_sequence)
   aminoacid_sequences[idx].append(hb)
 
   # Plot the data
@@ -47,13 +46,22 @@ for idx, sample in enumerate(aminoacid_sequences):
   ax = fig.add_subplot(1, 1, 1)
   ax.plot(xdata, ydata, '-b')
   ax.set_xlabel("Aminoacid Sequence Number")
-  ax.set_ylabel(f"Hydrophobicity ove span of {span_size} aminoacids")
+  ax.set_ylabel(f"Hydrophobicity over span of {span_size} aminoacids")
   ax.set_title(f"Hydrophobicity Plot of {sample[0]}")
+
+  # Hydrophobicity parameter cut off
+  y1 = 0.5
+  y2 = 1.0
+  c = 'red'
+  ax.axhspan(y1, y2, facecolor=c, alpha=0.5)
+
+  # Display graphs
   plt.show()
 
 
 # Output gene sequence, gene length, aa length translated amino acid sequences (one letter), and nucleotide errors
 for (mRNA, aminoacid_sequence) in zip(mRNAs, aminoacid_sequences): 
+  print(aminoacid_sequence[4])
   print(aminoacid_sequence[0])
   print("\nGene Sequence Length:")
   print(len(mRNA[2]))
