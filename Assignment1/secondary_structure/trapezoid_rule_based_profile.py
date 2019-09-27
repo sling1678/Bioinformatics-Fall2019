@@ -40,38 +40,11 @@ def compute_location_weights():
     return weights
 
 
-def von_heijne_scale():
-    "Ref: Von Heijne, J. Mol. Biol, 1992"
-    hydrophobicities = {
-        "A": 0.267, "C": 1.806, "D": -2.303, "E": -2.442, "F": 0.427, "G": 0.160,
-        "H": -2.189, "I": 0.971, "K": -2.996, "L": 0.623, "M": 0.136, "N": -1.988,
-        "P": -0.451, "Q": -1.814, "R": -2.749, "S": -0.119, "T": -0.083,
-        "V": 0.721, "W": -0.875, "Y": -0.386,
-    }
-    return hydrophobicities
-
-def aa_hydrophobicity():
+def KD_scale():
     hydrophobicity = {
-        "I"	: (4.5, 0.31,	-0.60,	-1.56,	1.97),
-        "V"	: (4.2,	-0.07,	-0.31,	-0.78,	1.46),
-        "L"	: (3.8,	0.56,	-0.55,	-1.81,	1.82),
-        "F"	: (2.8,	1.13,	-0.32,	-2.20,	1.98),
-        "C"	: (2.5,	0.24,	-0.13,	0.49,	-0.30),
-        "M"	: (1.9,	0.23,	-0.10,	-0.76,	1.40),
-        "A"	: (1.8,	-0.17,	0.11,	0.0,	0.38),
-        "G"	: (-0.4,	-0.01,	0.74,	1.72,	-0.19),
-        "T"	: (-0.7,	-0.14,	0.52,	1.78,	-0.32),
-        "S"	: (-0.8,	-0.13,	0.84,	1.83,	-0.53),
-        "W"	: (-0.9,	1.85,	0.30,	-0.38,	1.53),
-        "Y"	: (-1.3,	0.94,	0.68,	-1.09,	0.49),
-        "P"	: (-1.6,	-0.45,	2.23,	-1.52,	-1.44),
-        "H"	: (-3.2,	-0.96,	2.06,	4.76,	-1.44),
-        "E"	: (-3.5,	-2.02,	2.68,	1.64,	-2.90),
-        "Q"	: (-3.5,	-0.58,	2.36,	3.01,	-1.84),
-        "D"	: (-3.5,	-1.23,	3.49,	2.95,	-3.27),
-        "N"	: (-3.5,	-0.42,	2.05,	3.47,	-1.62),
-        "K"	: (-3.9,	-0.99,	2.71,	5.39,	-3.46),
-        "R"	: (-4.5,	-0.81,	2.58,	3.71,	-2.57),
+        "I": 4.5, "V": 4.2, "L": 3.8, "F": 2.8, "C": 2.5, "M": 1.9, "A": 1.8,
+        "G"	: -0.4, "T": -0.7, "S": -0.8, "W": -0.9, "Y": -1.3, "P": -1.6,
+        "H": -3.2, "E": -3.5, "Q": -3.5, "D": -3.5, "N": -3.5, "K": -3.9, "R": -4.5,
     }
     return hydrophobicity
 
@@ -89,8 +62,8 @@ def build_hydrophobicity_profile(aa_sequence):
     #hydrophobicities = von_heijne_scale()
     #hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
 
-    hydrophobicities = aa_hydrophobicity()
-    hp_vals = np.array([hydrophobicities[aa][0] for aa in aa_sequence])
+    hydrophobicities = KD_scale()
+    hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
 
     hp = []
 
