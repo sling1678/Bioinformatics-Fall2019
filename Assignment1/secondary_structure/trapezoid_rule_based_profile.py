@@ -1,6 +1,7 @@
 import numpy as np
-
+""" Total size of sliding window for trapezoid rule """
 OUTER_SIZE = 10
+""" Size of inner window for trapezoid rule """
 INNER_SIZE = 5
 
 """
