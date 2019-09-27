@@ -1,7 +1,6 @@
 from file_readers import read_fasta_file
 from translate import translate
-from secondary_structure import trapezoid_rule_based_profile
-import pickle
+from hydrophobicity import trapezoid_rule_based_profile
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -24,56 +23,57 @@ aminoacid_sequences = []    # translated into one letter amino acid sequences
 
 # Translate each gene sequence
 for mRNA in mRNAs:
+  # Save name of gene
   label, header = mRNA[0], mRNA[1]
-  # Just to check length of genome
+  # Save translated amino acid sequence and nucleotide errors
   aminoacid_sequence, nucleotide_errors = \
     translate.translate_simple(mRNA[2])
   aminoacid_sequences.append([label, header, aminoacid_sequence, nucleotide_errors])
 
 
 # Create hydrophobicity graphs
-span_size=13
 for idx, sample in enumerate(aminoacid_sequences):
+  # Calculate hydrophobicity
   aa_sequence = sample[2]
 
   hb = trapezoid_rule_based_profile.build_hydrophobicity_profile(aa_sequence)
   aminoacid_sequences[idx].append(hb)
 
   # Plot the data
-  xdata = np.array(range(len(hb))) + span_size//2
+  xdata = np.array(range(len(hb)))
   ydata = np.array(hb)
   fig = plt.figure(figsize=(10,6), num=idx)
   ax = fig.add_subplot(1, 1, 1)
   ax.plot(xdata, ydata, '-b')
-  ax.set_xlabel("Aminoacid Sequence Number")
-  ax.set_ylabel(f"Hydrophobicity over span of {span_size} aminoacids")
+  ax.set_xlabel("Amino acid Sequence Number")
+  ax.set_ylabel(f"Sum of Product of Relative Hydrophobicity and Relative Weight")
   ax.set_title(f"Hydrophobicity Plot of {sample[0]}")
 
-  # Hydrophobicity parameter cut off
-  y1 = 0.5
-  y2 = 1.0
-  c = 'red'
-  ax.axhspan(y1, y2, facecolor=c, alpha=0.5)
+  # Hydrophobicity parameter cut off (Above: 'M', Shaded: 'P', Bellow: 'x')
+  y1 = 0.5    # lower cut off
+  y2 = 1.0    # upper cut off
+  color = 'red'    # color of shaded putative region
+  ax.axhspan(y1, y2, facecolor=color, alpha=0.5)
 
   # Display graphs
   plt.show()
 
 
-# Output gene sequence, gene length, aa length translated amino acid sequences (one letter), and nucleotide errors
-for (mRNA, aminoacid_sequence) in zip(mRNAs, aminoacid_sequences): 
-  print(aminoacid_sequence[4])
+# Analyze hydrophobicity profile and save predictions of transmembrane domains
+for prediction, sample in enumerate(aminoacid_sequences):
+  aa_sequence = sample[2]
+
+  hb = trapezoid_rule_based_profile.analyze_sequence(aa_sequence)
+  aminoacid_sequences[prediction].append(hb)
+
+
+# Output gene sequence name, translated amino acid sequences (one letter), nucleotide errors, and predicted transmembrane domains
+for aminoacid_sequence in aminoacid_sequences: 
   print(aminoacid_sequence[0])
-  print("\nGene Sequence Length:")
-  print(len(mRNA[2]))
-  print("\nAmino acid Sequence Length:")
-  print(len(aminoacid_sequence[2]))
   print("\nAmino acid Sequence (one letter translation):")
   print(aminoacid_sequence[2])
   print("\nNucleotide Errors:")
   print(aminoacid_sequence[3])
+  print("\nPrediction of Transmembrane Domains ('x': undecided, 'M': definitely inside membrane, 'P': putatively inside membrane):")
+  print(aminoacid_sequence[5])
   print("\n")
-
-
-# save
-# with open('data/aa_sequences.dat', 'wb') as outfile:
-#     pickle.dump(aminoacid_sequences, outfile)
