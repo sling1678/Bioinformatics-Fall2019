@@ -39,7 +39,10 @@ def compute_location_weights():
 
     return weights
 
-
+"""
+Returns mapping of amino acid character codes to their approximate hydrophobicity mappings based on the Kyte, Doolittle
+study.
+"""
 def KD_scale():
     hydrophobicity = {
         "I": 4.5, "V": 4.2, "L": 3.8, "F": 2.8, "C": 2.5, "M": 1.9, "A": 1.8,
@@ -59,9 +62,6 @@ Returns:
   hp : hydrophobicity profile as numpy array
 """
 def build_hydrophobicity_profile(aa_sequence):
-    #hydrophobicities = von_heijne_scale()
-    #hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
-
     hydrophobicities = KD_scale()
     hp_vals = np.array([hydrophobicities[aa] for aa in aa_sequence])
 
@@ -151,38 +151,3 @@ def analyze_hydrophobicity_profile(hp, upper_cutoff=1, lower_cutoff=.5):
     result_string = ''.join(result_string)
 
     return result_string, hp_with_true_indices
-
-
-def print_predictions(aa_sequence, result, line_len=50):
-    cur_idx = 0
-    while True:
-        if cur_idx + line_len < len(aa_sequence):
-            print(result[cur_idx:cur_idx + line_len])
-            print(aa_sequence[cur_idx:cur_idx + line_len])
-            cur_idx += line_len
-        else:
-            print(result[cur_idx:])
-            print(aa_sequence[cur_idx:])
-            break
-
-
-if __name__ == "__main__":
-    # aa_sequence="F"*7+"I"*7+"C"*7+"A"*7 # test sequence
-    aa_sequence = "C" * 21
-    hp = build_hydrophobicity_profile(aa_sequence)
-
-    result = analyze_hydrophobicity_profile(hp)
-    print(result)
-
-def analyze_sequence(aminoacid_seq):
-    hp = build_hydrophobicity_profile(aminoacid_seq)
-    result = analyze_hydrophobicity_profile(hp)
-    """
-    print(f"length of amino acid sequence {len(aminoacid_seq)}")
-    print(f"amino acid sequence{aminoacid_seq}")
-    print(f"length of hydrophobicity profile {len(hp)}")
-    print(f"hydrophobicity profile {hp}")
-    print(f"length of result {len(result)}")
-    print(f"result {result}")
-    """
-    return result
