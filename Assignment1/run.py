@@ -9,19 +9,21 @@ BIOINFORMATICS - Assignment 1
 
 Group: David Blanck, Sammy Ling, Andrew Richter, Kaveri Sharma
 
-Description: Program for taking gene sequences from a FASTA file and translating into amino acid sequence.
-  Outputs translated sequences.
-  Computes hydrophobic average over span.
-  Will determine how likely each sequence is to encode a membrane protein.
-
+Driver program of this project.  Performs the following tasks:
+  
+  Reads in gene sequences from a FASTA file.
+  Translates each gene sequence into an amino acid sequence and outputs the amino acid sequences.
+  Computes context oriented hydrophobic value for each amino acid residue in sequence.
+  Uses context oriented hydrophobic values to determine if a sequence is likely to encode a membrane protein
+  and locate the transmembrane regions.
+  Prints the string denoting the predicted locations of each (if any) transmembrane region for each gene.
 """
 
 data_file = "data/Assignment1Sequences.txt"    # sample gene sequence file
 mRNAs = read_fasta_file.read_file(data_file)    # read in file and store genes to be translated
-aminoacid_sequences = []    # translated into one letter amino acid sequences
 
-
-# Translate each gene sequence
+# Translate each gene sequence and store the resultant amino acid sequence in aminoacid_sequences array
+aminoacid_sequences = []
 for mRNA in mRNAs:
   # Save name of gene
   label, header = mRNA[0], mRNA[1]
@@ -31,15 +33,14 @@ for mRNA in mRNAs:
   aminoacid_sequences.append([label, header, aminoacid_sequence, nucleotide_errors])
 
 
-# Create hydrophobicity graphs
+# Calculate context oriented hydrophobic values for each amino acid in each sequence and graph the result
 for idx, sample in enumerate(aminoacid_sequences):
   # Calculate hydrophobicity
   aa_sequence = sample[2]
-
   hb = trapezoid_rule_based_profile.build_hydrophobicity_profile(aa_sequence)
   aminoacid_sequences[idx].append(hb)
 
-  # Plot the data
+  # Plot the hydrophobic values for each amino acid in sequence
   xdata = np.array(range(len(hb)))
   ydata = np.array(hb)
   fig = plt.figure(figsize=(10,6), num=idx)
@@ -49,7 +50,9 @@ for idx, sample in enumerate(aminoacid_sequences):
   ax.set_ylabel(f"Sum of Product of Relative Hydrophobicity and Relative Weight")
   ax.set_title(f"Hydrophobicity Plot of {sample[0]}")
 
-  # Hydrophobicity parameter cut off (Above: 'M', Shaded: 'P', Bellow: 'x')
+  # Illustrate the cut off parameters in the graph.  These cutoff parameters are used in the trapezoid rule
+  # implementation to determine which residues are certain transmembrane regions, which are putative regions, and which
+  # are certainly not transmembrane regions.
   y1 = 0.5    # lower cut off
   y2 = 1.0    # upper cut off
   color = 'red'    # color of shaded putative region
@@ -59,7 +62,8 @@ for idx, sample in enumerate(aminoacid_sequences):
   plt.show()
 
 
-# Analyze hydrophobicity profile and save predictions of transmembrane domains
+# Analyze the hydrophobic profiles of each gene sequence.  Predicts the location of any transmembrane regions that may
+# exist.
 for prediction, sample in enumerate(aminoacid_sequences):
   aa_sequence = sample[2]
 
@@ -67,7 +71,8 @@ for prediction, sample in enumerate(aminoacid_sequences):
   aminoacid_sequences[prediction].append(hb)
 
 
-# Output gene sequence name, translated amino acid sequences (one letter), nucleotide errors, and predicted transmembrane domains
+# Output gene sequence name, translated amino acid sequences (one letter), nucleotide errors,
+# and predicted location of transmembrane regions.
 for aminoacid_sequence in aminoacid_sequences: 
   print(aminoacid_sequence[0])
   print("\nAmino acid Sequence (one letter translation):")
